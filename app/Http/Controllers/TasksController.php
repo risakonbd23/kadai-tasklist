@@ -9,16 +9,20 @@ use App\Task;
 class TasksController extends Controller
 {
   
-  
-  public function index()
-  {
-    $tasks = Task::all();
-    return view('tasks.index', [
-        'tasks' => $tasks,
-        ]);
-    
-  }
-  
+    public function index()
+    {
+       
+        if (\Auth::check()) {
+            $tasks = Task::user()->id;
+            return view('tasks.index', [
+                'tasks' => $tasks,
+            ]);   
+       
+        } else {
+            return view('welcome');
+        }
+    }   
+        
   public function show($id)
   {
      $task = Task::find($id);
@@ -45,6 +49,7 @@ class TasksController extends Controller
         $task = new Task;
         $task->status = $request->status;
         $task->content = $request->content;
+        $task->user_id = \Auth::user()->id;
         $task->save();
 
         return redirect('/');
@@ -68,6 +73,7 @@ class TasksController extends Controller
         $task = Task::find($id);
         $task->status = $request->status;
         $task->content = $request->content;
+        $task->user_id = \Auth::user()->id;
         $task->save();
 
         return redirect('/');
