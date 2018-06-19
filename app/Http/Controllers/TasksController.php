@@ -79,18 +79,23 @@ class TasksController extends Controller
         'content'=> 'required|max:255',]);
         
         $task = Task::find($id);
+        if($task->user_id == \Auth::user()->id){
         $task->status = $request->status;
         $task->content = $request->content;
         $task->save();
-
+        }
+        
         return redirect('/');
     }
-    
+        
      public function destroy($id)
-    {
+    {  
         $task = Task::find($id);
+        if($task->user_id == \Auth::user()->id){
         $task->delete();
-
+        }
+    
         return redirect('/');
-    }
+        
+    }    
 }
